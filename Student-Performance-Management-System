@@ -1,0 +1,454 @@
+#include<stdio.h> 	  //这是编译预处理指令
+#include <stdlib.h> 	  //这是编译预处理指令
+#include<string.h>        //这是编译预处理指令
+#define N 1000 		  //学生数是1000
+int count=0;              //定义全局变量count并初始化
+struct student		  //建立结构体类型struct student
+{ 
+long int num; 		  //学号
+char name[20];  	  //姓名
+char sex[4]; 		  //性别
+float chinese; 		  //语文成绩
+float math; 		  //数学成绩
+float english; 		  //英语成绩
+float ave; 		  //平均分
+float sum;		  //总分
+};
+struct student stu[N];	  //函数声明
+
+
+void sort() 		  //定义sort函数
+{
+struct student temp; 	  //定义变量temp
+int i=1,j=1;		  //定义int型变量i,j
+for( ;i<count;i++) 	  //执行循环，找出分数最高的学生学号
+{ 
+	for( ;j<=count-i;j++) 
+	{
+	if(stu[j-1].num>stu[j].num) 
+		{ temp=stu[j]; stu[j]=stu[j-1]; stu[j-1]=temp; }	//将该学生的学号赋给temp
+	} 
+} 
+}
+void aver()		  //函数声明
+{ 
+int i; 
+for(i=0;i<count;i++) 	  //执行循环，计算每个学生的平均分
+	{
+	stu[i].sum=stu[i].chinese+stu[i].math+stu[i].english; stu[i].ave=stu[i].sum/3; 
+	} 
+}
+void Menu()		  //函数声明
+{ 
+printf("                    欢迎访问学生成绩管理系统                    \n");
+printf("————————————————————————————————\n");
+printf("1  录入成绩\n"); 
+printf("2  插入成绩\n"); 
+printf("3  显示成绩\n"); 
+printf("4  查询成绩\n"); 
+printf("5  修改信息\n"); 
+printf("6  分数排序\n"); 
+printf("7  学号排序\n"); 
+printf("8  删除信息\n"); 
+printf("9  删除文件\n"); 
+printf("10 读取文件\n"); 
+printf("11 保存信息\n"); 
+printf("0  退出程序\n"); 
+printf("————————————————————————————————\n"); 
+}
+
+
+void input()		  //函数声明
+{
+int i=0;
+char ch;		  //定义字符型变量ch
+do			  //执行循环体输入学生学号，学生姓名，学生性别，学生语文成绩，学生数学成绩，学生英语成绩
+	{
+	system("cls");
+	printf("—————————————录入学生成绩信息—————————————\n");
+	printf("——————————————————————————————————\n"); 
+	printf("\n\t\t\t请输入学生学号:");
+	scanf("%d",&stu[i].num);
+	fflush(stdin);
+	printf("\n\t\t\t请输入学生姓名:");
+	fflush(stdin);
+	gets(stu[i].name);
+	printf("\n\t\t\t请输入学生性别:");
+	fflush(stdin);
+	gets(stu[i].sex);
+	printf("\n\t\t\t请输入学生语文成绩:");
+	scanf("%f",&stu[i].chinese);
+	printf("\n\t\t\t输入学生数学成绩:");
+	fflush(stdin);
+	scanf("%f",&stu[i].math); 
+	printf("\n\t\t\t输入学生英语成绩:"); 
+	fflush(stdin); scanf("%f",&stu[i].english); 
+	printf("\n\n"); 
+	i++; count=i; aver();
+	printf("是否继续输入?(Y/N):");
+	fflush(stdin);
+	ch=getchar();
+	}
+while(ch!='n'&&ch!='N');
+system("cls");
+}
+
+void cj()			//函数声明
+{
+int i,j;
+struct student temp;
+aver();				//调用函数aver()
+for(i=1;i<count;i++)		//执行循环体
+{
+	for(j=1;j<=count-i;j++)
+	{
+	if(stu[j-1].ave<stu[j].ave)
+		{temp=stu[j];stu[j]=stu[j-1];stu[j-1]=temp;}
+	}
+}
+}
+
+
+void display() 			//函数声明
+{
+int i;
+char as;			//定义字符型变量as
+do				//执行循环，输出学生信息
+	{
+	printf("———————————————所有的学生的信息如下—————————————\n");
+	printf("      学号    姓名    性别    语文    数学    英语    平均成绩 \n");
+	printf("——————————————————————————————————————\n");
+	for(i=0;i<count&&stu[i].name[0];i++)
+	printf("\t%d\t%s\t%s\t%.1f\t%.1f\t%.1f\t%.1f\n",stu[i].num,stu[i].name,stu[i].sex,stu[i].chinese,stu[i].math,stu[i].english,stu[i].ave);
+	printf("——————————————————————————————————————\n");
+	printf("\t\t\t按任意键返回主菜单");
+	fflush(stdin);		//调用fflush(stdin)函数
+	as=getchar();		//赋值
+	}
+while(!as);			//条件语句，当不为as时进行system("cls")
+system("cls");
+}
+
+void insert() 			//函数声明
+{
+char ch;
+do				//当ch不等于n且不等于N时执行下列操作
+	{
+	printf("\n\t\t输入新插入学生信息\n");
+	printf("\n输入学生学号:");
+	scanf("%d",&stu[count].num);		//给stu[count].num赋值
+	fflush(stdin);				//调用fflush(stdin)函数
+	printf("\n输入学生姓名:");
+	fflush(stdin);				//调用fflush(stdin)函数
+	gets(stu[count].name);			//输入学生姓名
+	printf("\n输入学生性别:");
+	fflush(stdin);				//调用fflush(stdin)函数				
+	gets(stu[count].sex);			//输入学生性别
+	printf("\n输入学生语文成绩:");
+	fflush(stdin);				//调用fflush(stdin)函数
+	scanf("%f",&stu[count].chinese);	//输入学生语文成绩
+	printf("\n输入学生数学成绩:");
+	fflush(stdin);				//调用fflush(stdin)函数
+	scanf("%f",&stu[count].math);		//学生数学成绩
+	printf("\n输入学生英语成绩:");
+	fflush(stdin);				//调用fflush(stdin)函数
+	scanf("%f",&stu[count].english);	//学生英语成绩
+	printf("\n\n");
+	count=count+1;
+	sort();					//调用sort()函数
+	printf("是否继续输入?(Y/N):");
+	fflush(stdin);				//调用fflush(stdin)函数
+	ch=getchar();
+	getchar();
+	system("cls");
+	}
+while(ch!='n'&&ch!='N');
+}
+
+void del() 					//函数声明
+{
+int i,inum;
+printf("输入要删除学生的学号:");
+fflush(stdin);					//调用fflush(stdin)函数
+scanf("%d",&inum);
+for(i=0;i<count;i++)				//当i小于count时执行循环
+{
+	if(stu[i].num==inum)			//当stu[i].num==inum执行
+	{
+		if(i==count) count-=1;		//当i等于count时使count等于1
+		else
+		{
+		stu[i]=stu[count-1];		//当stu[i]=stu[count-1]时count等于count减一
+		count-=1;
+		}
+sort();						//调用sort()函数
+break;						//跳出，结束该循环
+	}
+}
+printf("您已成功删除学生信息了，请按任意键返回主菜单");
+getchar();
+getchar();
+system("cls");
+}
+
+
+void save() 					//函数声明
+{
+FILE *fp;					//定义指针变量*fp
+int i;
+char filepath[20];				//定义字符数组
+printf("输入要保存的文件名称:");
+fflush(stdin);					//调用fflush(stdin)函数
+gets(filepath);
+if((fp=fopen(filepath,"w"))==NULL)
+	{
+	printf("\n保存失败!");
+	system("puse");
+	exit(0);
+	}
+else
+	{
+	for(i=0;i<count;i++)
+		{
+		stu[i].sum=stu[i].chinese+stu[i].math+stu[i].english;
+		stu[i].ave=stu[i].sum/3;
+		fprintf(fp,"\t%d\t%s\t%s\t%.1f\t%.1f\t%.1f\t%.1f\n",stu[i].num,stu[i].name,stu[i].sex,stu[i].chinese,stu[i].math,stu[i].english,stu[i].ave);
+		}
+fclose(fp);
+printf("学生信息已保存在“%s”中!\n",filepath);
+system("pause");
+system("cls");
+	}
+}
+
+void find() 				//函数声明
+{
+int i;
+char str[20],as;			//定义字符数组str长度20,定义as
+do
+	{
+	printf("输入要查询的学生姓名:");
+	fflush(stdin);			//调用fflush(stdin)函数		
+	gets(str);			//给字符组赋值
+	for(i=0;i<count;i++)
+	if(!strcmp(stu[i].name,str))
+	{
+	printf("—————————————您要查询的学生的信息如下—————————————\n");
+	printf("——————————————————————————————————————\n"); 
+	printf(" 学号       姓名       性别       语文       数学       英语       平均成绩 \n");
+	printf("——————————————————————————————————————\n");
+	printf("\t%d\t%s\t%s\t%.1f\t%.1f\t%.1f\t%.1f\n",stu[i].num,stu[i].name,stu[i].sex,stu[i].chinese,stu[i].math,stu[i].english,stu[i].ave);
+	printf("——————————————————————————————————————\n");
+	break;
+	};
+	if(i==count) printf("无此学生信息!\n");
+	printf("\t\t\t按任意键返回主菜单");
+	fflush(stdin);			//调用fflush(stdin)函数
+	as=getchar();
+	}
+while(!as);
+system("cls");
+}
+
+
+void xiugai() 				//函数声明
+{
+int i;
+char str[20];
+printf("输入要修改的学生姓名:");
+fflush(stdin);				//调用fflush(stdin)函数
+gets(str);
+for(i=0;i<count;i++)
+	{
+		if(!strcmp(stu[i].name,str))
+		{
+		system("cls");
+		printf("\n\t\t输入修改后的学生信息\n"); 
+		printf("\n输入学生学号:"); 
+		fflush(stdin); 						//调用fflush(stdin)函数
+		scanf("%u",&stu[i].num); 
+		printf("\n输入学生性别:"); 
+		fflush(stdin); 						//调用fflush(stdin)函数
+		gets(stu[i].sex); 
+		printf("\n输入学生语文成绩:");
+		fflush(stdin); 						//调用fflush(stdin)函数
+		scanf("%f",&stu[i].chinese);
+		printf("\n输入学生数学成绩:");
+		fflush(stdin); 						//调用fflush(stdin)函数
+		scanf("%f",&stu[i].math); 
+		printf("\n输入学生英语成绩:"); 
+		fflush(stdin); 						//调用fflush(stdin)函数
+		scanf("%f",&stu[i].english);
+		printf("您已成功修改学生信息了，请按任意键返回主菜单"); 
+		getchar(); 
+		sort();
+	break;
+		}
+	}
+if(i==count) printf("\t\t\t查无此学生信息!\n\n\t\t\t按任意键返回主菜单");
+getchar();
+system("cls");
+}
+
+
+void shanchu() 			//函数声明
+{
+FILE *fp;
+char filepath[20];
+printf("请输入要删除的文件名称:");
+fflush(stdin);			//调用fflush(stdin)函数
+gets(filepath);
+fp=fopen(filepath,"w");
+fclose(fp);
+printf("保存的在文件“%s”中的所有信息已经删除!\n请按任意键返回菜单",filepath);
+system("pause"); 
+system("cls");
+}
+
+
+void read()				//函数声明
+{
+FILE *fp;
+int i;
+char filepath[20];
+printf("请输入要读入的文件名称:");
+fflush(stdin);				//调用fflush(stdin)函数
+gets(filepath);
+if((fp=fopen(filepath,"r"))==NULL)
+	{
+	printf("找不到“%s”文件!\n",filepath);
+	system("pause");
+	exit(0);
+	}
+for(i=count;i<N&&!feof(fp);i++)
+	{
+	fscanf(fp,"\t%d\t%s\t%s\t%f\t%f\t%f\t%f\n",&stu[i].num,stu[i].name,stu[i].sex,&stu[i].chinese,&stu[i].math,&stu[i].english,&stu[i].ave);
+	count++;
+	}
+fclose(fp);
+printf("保存的在文件“%s”中的所有信息已经读入!\n请返回主菜单查询\n",filepath);
+system("pause"); 
+}
+
+
+void main()				//定义主函数
+{					//主函数体开始
+int a;					//定义变量a
+char pd,pd2;				//定义变量pd,pd2
+while(1)				//当为1时执行
+{
+aver();					//调用aver函数
+Menu();					//调用Menu函数
+printf("请输入你的选择：");
+scanf("%d",&a);				//给a赋值
+if(a==1)				
+	{				
+		system("cls");		//学生成绩管理系统	
+		printf("此功能是重新录入学生信息，选择此功能会删除原有数据，请确认是否选择？(Y/N):"); 
+		fflush(stdin);		//调用fflush(stdin)函数
+		pd2=getchar();getchar();//给pd,pd2赋值
+		if(pd2=='Y'||pd2=='y')	//条件语句
+			{
+			input();	//调用input()
+			printf("您已成功录入学生成绩了，请按任意键返回主菜单");
+			getchar();	//赋值
+			getchar();	//赋值
+			system("cls");	
+			}
+	}
+    else
+	  if(a==2)
+	  {
+		    system("cls");
+		    insert();		//调用insert()	
+	  	    printf("您已成功插入学生信息了，请按任意键返回主菜单");
+		    getchar();		//赋值
+		    system("cls");
+	  }
+	  else
+		if(a==3)
+		{
+		    system("cls");
+		    if(count==0)		//条件语句
+			{
+			     printf("无信息，请返回主菜单按10从文件录入或按1添加!\n按任意键返回主菜单");
+			     getchar();
+			     getchar();
+			     system("cls");
+			}
+		    display();		//调用display()
+		    system("cls");
+		}
+		else
+		  if(a==4)
+		  {
+		      system("cls");
+		      find();			//调用find()
+		      system("cls");
+		  }
+		  else
+			if(a==5)
+			{
+		    system("cls");
+		    xiugai();		//调用xiugai()
+			}
+			else
+				if(a==6)
+				{
+		        system("cls");
+		        cj();			//调用cj()
+		        printf("已按平均成绩排好序，信息如下：\n");
+		        display();		//调用display()
+				}
+	            else
+					if(a==7)
+					{
+		            system("cls");
+		            sort();			//调用sort()
+		            printf("已按学号排好序，信息如下：\n");
+	 	            display();		//display()
+					}
+					else
+						if(a==8)
+						{
+		                system("cls");
+		                del();			//调用del()
+						}
+						else
+                          if(a==9)
+						  {
+							system("cls");
+							shanchu();		//调用shanchu()
+						  }
+						  else 
+							  if(a==10)
+							  {
+		                      system("cls");
+		                      read();			//调用read()
+							  }
+	                          else
+		                        if(a==10)
+								{
+		                         system("cls");
+		                         save();			//调用save()
+								}
+                                else
+									if(a==0)
+									{
+	         	                      system("cls");
+		                              printf("退出前请保存学生信息，请确认你已经保存?(Y/N):");
+		                              fflush(stdin);	//调用fflush(stdin)
+		                              pd=getchar();
+		                              getchar(); 
+		                              if(pd=='Y'||pd=='y') 	//条件语句
+									  {
+										 printf("您已经成功退出学生信息管理系统了。\n");
+										 exit(0);
+									  } 		                      
+									}
+}
+printf("请按回车键继续\n"); 
+getchar();
+getchar(); 
+system("cls");
+}
